@@ -1,0 +1,59 @@
+name: Maven Build and Test for GitHub Classroom
+
+# Trigger the workflow on push or pull requests to any branch
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enforce Unit Test Integrity (Delete and Download Original Tests)
+        run: |
+          rm Assignment/src/test/java/autogradertests/*.java
+          git clone https://github.com/UofL-CSE-AutoGrader/CSE-220.git
+          cp CSE-220/PA-Class-Builder-Pattern/*.java Assignment/src/test/java/autogradertests/
+          rm -rf CSE-220
+
+      # Set up Java (you can specify any required version here,
+      - name: Set up JDK 22
+        uses: actions/setup-java@v4
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+
+      # Cache Maven dependencies to speed up build times
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Install Maven dependencies
+      - name: Install Maven dependencies
+        run: mvn install -DskipTests -Dgpg.skip=true
+        working-directory: Assignment
+
+      # Run Maven tests
+      - name: Run Maven tests
+        run: mvn test -Dgpg.skip=true
+        working-directory: Assignment
+
+
+      # # Optionally, upload test results
+      # - name: Archive test results
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: test-results
+      #     path: target/surefire-reports/

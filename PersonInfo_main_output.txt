@@ -1,0 +1,10 @@
+/Users/nathan/Library/Java/JavaVirtualMachines/openjdk-24.0.2+12-54/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=50423 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath /Users/nathan/github/teaching/PA-Class-Builder-Pattern/Assignment/target/classes edu.coolschool.utilities.PersonInfo
+First Name: John
+Middle Name: Q
+Last Name: Public
+Date of Birth: 03/15/2024
+Country of Residence: United States of America
+Country of Birth: United States of America
+
+
+Process finished with exit code 0
